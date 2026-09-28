@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Condition Lab - Home</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 24px; max-width: 900px; }
+  .hidden { display: none; }
+  fieldset { margin: 12px 0; }
+</style>
+</head>
+<body>
+
+<h1 id="heading">Condition Lab</h1>
+<p id="version">Build v4.21.0 (rc3)</p>
+
+<fieldset>
+  <legend>Form</legend>
+  <input id="username" name="username" type="text" placeholder="user"/>
+  <input id="email" name="email" type="text" value=""/>
+  <button id="submit" type="button" disabled aria-disabled="true" data-state="pending">Submit</button>
+  <input id="tos" type="checkbox"/>
+  <input id="marketing" type="checkbox"/>
+</fieldset>
+
+<div id="spinner">Loading, please wait</div>
+<div id="status"></div>
+<div id="stale">original</div>
+
+<ul id="rows">
+  <li class="row">row-1</li>
+</ul>
+
+<div id="panel"></div>
+
+<fieldset>
+  <legend>Navigation</legend>
+  <button id="alertBtn" type="button" onclick="window.alert('confirm-settlement')">Raise alert</button>
+  <button id="newWinBtn" type="button" onclick="window.open('second.html','_blank')">Open window</button>
+  <a id="goSecond" href="second.html">Go to second</a>
+</fieldset>
+
+<iframe id="contentFrame" name="content" src="frame.html" width="420" height="120"></iframe>
+
+<script>
+  // 300 ms - JS flag for jsReturnsValue / javaScriptThrowsNoExceptions
+  setTimeout(function () { window.appReady = "READY"; }, 300);
+
+  // 500 ms - value appears (textToBePresentInElementValue, domPropertyToBe)
+  setTimeout(function () {
+    document.getElementById('email').value = 'qa@example.com';
+  }, 500);
+
+  // 700 ms - button enables (elementToBeClickable, attributeToBe, domAttributeToBe)
+  setTimeout(function () {
+    var b = document.getElementById('submit');
+    b.removeAttribute('disabled');
+    b.setAttribute('aria-disabled', 'false');
+    b.setAttribute('data-state', 'ready-to-submit');
+  }, 700);
+
+  // 800 ms - checkbox becomes selected (elementToBeSelected, elementSelectionStateToBe)
+  setTimeout(function () { document.getElementById('tos').checked = true; }, 800);
+
+  // 900 ms - status text appears (textToBePresentInElementLocated, textMatches)
+  setTimeout(function () {
+    document.getElementById('status').textContent = 'SETTLED 42 trades';
+  }, 900);
+
+  // 1000 ms - spinner disappears (invisibilityOfElementLocated / WithText)
+  setTimeout(function () {
+    document.getElementById('spinner').classList.add('hidden');
+  }, 1000);
+
+  // 1100 ms - rows grow from 1 to 3 (numberOfElementsToBe / MoreThan / LessThan)
+  setTimeout(function () {
+    var ul = document.getElementById('rows');
+    [2, 3].forEach(function (n) {
+      var li = document.createElement('li');
+      li.className = 'row';
+      li.textContent = 'row-' + n;
+      ul.appendChild(li);
+    });
+  }, 1100);
+
+  // 1200 ms - nested children appear (presenceOf/visibilityOfNestedElements)
+  setTimeout(function () {
+    var p = document.getElementById('panel');
+    p.innerHTML = '<span class="child">alpha</span><span class="child">beta</span>';
+  }, 1200);
+
+  // 1300 ms - #stale is replaced, invalidating any prior reference (stalenessOf)
+  setTimeout(function () {
+    var old = document.getElementById('stale');
+    var fresh = document.createElement('div');
+    fresh.id = 'stale';
+    fresh.textContent = 'replaced';
+    old.parentNode.replaceChild(fresh, old);
+  }, 1300);
+</script>
+</body>
+</html>
